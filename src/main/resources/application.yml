@@ -1,0 +1,83 @@
+server:
+  port: 8080
+#  servlet:
+#    context-path: /clothing
+
+spring:
+  #Druid
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/clothing_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  #rabbitmq
+  rabbitmq:
+    host: 192.168.117.129
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    ##消费者数量
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 10
+        ###消费者每次从队列里面取一个(取多个可以加快队列消费速度，但是如果队列一直不消费，就一直占着资源)
+        prefetch: 1
+        ###消费者自动启动
+        auto-startup: true
+        ###消费者消费失败后会重新把消息装回队列
+        default-requeue-rejected: true
+    ##自动重试
+    template:
+      retry:
+        enabled: true
+        ###1秒后重试
+        initial-interval: 1000
+        ###最多三次
+        max-attempts: 3
+        ###最大间隔 1000ms
+        max-interval: 1000
+        multiplier: 1
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+### Mybatis 开启日志
+logging:
+  level:
+    com:
+      jjy:
+        aircinema:
+          dao: debug
+    org:
+      springframework:
+        web: trace
+
+#redis
+redis:
+  host: 192.168.117.129
+  port: 6379
+  password: 123456
+  timeout: 10
+  poolMaxTotal: 1000
+  poolMaxIdle: 500
+  poolMaxWait: 500
+
+#图片上传地址
+#upload:
+#  config:
+#    path: /usr/local/src/vhr/dist/static/
+
+#token
+token:
+  expire-time: 1200000
+  secret: tokensecret
+
+
+
+
+

@@ -1,5 +1,6 @@
 package tech.yxing.clothing.controller;
 
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -9,14 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import tech.yxing.clothing.exception.GlobleException;
 import tech.yxing.clothing.myshiro.MyShiro;
 import tech.yxing.clothing.pojo.po.User;
+import tech.yxing.clothing.pojo.vo.PagesVo;
 import tech.yxing.clothing.pojo.vo.UserVo;
-import tech.yxing.clothing.redis.RedisService;
+//import tech.yxing.clothing.redis.RedisService;
 import tech.yxing.clothing.redis.UserKey;
 import tech.yxing.clothing.result.CodeMsg;
 import tech.yxing.clothing.result.Result;
 import tech.yxing.clothing.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author Joe
@@ -31,8 +34,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private RedisService redisService;
+//    @Autowired
+//    private RedisService redisService;
 
     /**
      * @methodDesc: 用户信息管理
@@ -140,5 +143,18 @@ public class UserController {
         }
         Double balance = userService.getBalance(user.getUserId());
         return Result.success(String.valueOf(balance));
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public Result<Object> delUser(@PathVariable int userId){
+        userService.delUser(userId);
+        return Result.success(null);
+    }
+
+    @GetMapping("/list/{page}")
+    public Result<PageInfo<User>> listUser(@PathVariable String page){
+        Integer num = Integer.parseInt(page);
+        PagesVo pagesVo = new PagesVo(num);
+        return Result.success(userService.listUser(pagesVo));
     }
 }

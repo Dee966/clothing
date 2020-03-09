@@ -6,6 +6,8 @@ import tech.yxing.clothing.pojo.po.Orders;
 import tech.yxing.clothing.pojo.po.User;
 import tech.yxing.clothing.pojo.vo.UserVo;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface UserDao {
@@ -30,4 +32,11 @@ public interface UserDao {
 
     @Select("select * from user where username=#{username}")
     User getUserByUname(String username);
+
+    @Delete("delete from user where user_id = #{userId}")
+    void delUser(int userId);
+
+    @Select("select * from user")
+    List<User> listUser();
+
 }

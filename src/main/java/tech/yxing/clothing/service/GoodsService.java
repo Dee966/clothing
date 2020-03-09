@@ -6,20 +6,21 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+//import redis.clients.jedis.Jedis;
+//import redis.clients.jedis.JedisPool;
 import tech.yxing.clothing.dao.GoodsDao;
 import tech.yxing.clothing.exception.GlobleException;
 import tech.yxing.clothing.pojo.dto.GoodsDto;
+import tech.yxing.clothing.pojo.dto.GoodsSizeDto;
 import tech.yxing.clothing.pojo.po.Goods;
 import tech.yxing.clothing.pojo.po.GoodsSize;
 import tech.yxing.clothing.pojo.po.GoodsType;
 import tech.yxing.clothing.pojo.vo.GoodsSizeVo;
 import tech.yxing.clothing.pojo.vo.GoodsUploadVo;
 import tech.yxing.clothing.redis.GoodsKey;
-import tech.yxing.clothing.redis.RedisConfig;
-import tech.yxing.clothing.redis.RedisPoolFactory;
-import tech.yxing.clothing.redis.RedisService;
+//import tech.yxing.clothing.redis.RedisConfig;
+//import tech.yxing.clothing.redis.RedisPoolFactory;
+//import tech.yxing.clothing.redis.RedisService;
 import tech.yxing.clothing.result.CodeMsg;
 import tech.yxing.clothing.utils.MyUpload;
 
@@ -32,10 +33,10 @@ import java.util.UUID;
 public class GoodsService {
     @Autowired
     private GoodsDao goodsDao;
-    @Autowired
-    private RedisService redisService;
-    @Autowired
-    private JedisPool jedisPool;
+//    @Autowired
+//    private RedisService redisService;
+//    @Autowired
+//    private JedisPool jedisPool;
 
 
     /**
@@ -46,17 +47,18 @@ public class GoodsService {
      */
     public List<Goods> goodsShowAll(){
         //缓存中取所有商品
-        List<Goods> goodsList = redisService.getList(GoodsKey.allGoods, "all", Goods.class);
-        if (goodsList != null){
-            return goodsList;
-        }
+//        List<Goods> goodsList = redisService.getList(GoodsKey.allGoods, "all", Goods.class);
+//        if (goodsList != null){
+//            return goodsList;
+//        }
         //走数据库
-        goodsList = goodsDao.goodsShowAll();
+        List<Goods> goodsList = goodsDao.goodsShowAll();
         if (goodsList.isEmpty()){
             throw new GlobleException(CodeMsg.GOODS_NULL);
-        } else {
-            redisService.set(GoodsKey.allGoods, "all", goodsList);
         }
+//        else {
+//            redisService.set(GoodsKey.allGoods, "all", goodsList);
+//        }
         //不为空返回goodsList
         return goodsList;
     }
@@ -68,14 +70,14 @@ public class GoodsService {
      */
     public Goods goodsShow(int goodsId){
         //缓存中查goods
-        Goods goods = redisService.get(GoodsKey.getById, ""+goodsId, Goods.class);
-        if (goods != null){
-            return goods;
-        }
-        goods = goodsDao.goodsShow(goodsId);
-        if (goods != null){
-            redisService.set(GoodsKey.getById, ""+goodsId, goods);
-        }
+//        Goods goods = redisService.get(GoodsKey.getById, ""+goodsId, Goods.class);
+//        if (goods != null){
+//            return goods;
+//        }
+        Goods goods = goodsDao.goodsShow(goodsId);
+//        if (goods != null){
+//            redisService.set(GoodsKey.getById, ""+goodsId, goods);
+//        }
         return goods;
     }
     /**
@@ -143,5 +145,9 @@ public class GoodsService {
 
     public List<GoodsSize> goodsSize(int goodsId){
         return goodsDao.goodsSize(goodsId);
+    }
+
+    public GoodsSizeDto getGoodsAndSize(int goodsId){
+        return goodsDao.getGoodsAndSize(goodsId);
     }
 }

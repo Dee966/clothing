@@ -103,6 +103,7 @@ public class CartController {
     @ApiOperation(value = "购物车下单", notes = "用户端-通过购物车下单")
     @PostMapping("/cart_order")
     public Result<Orders> cartOrder(@RequestBody List<ShoppingCart> shoppingCartList){
+        System.out.println("check:"+shoppingCartList);
         return Result.success(cartService.cartOrder(shoppingCartList));
     }
 }

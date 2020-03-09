@@ -11,34 +11,34 @@ spring:
     username: root
     password: root
   #rabbitmq
-  rabbitmq:
-    host: 192.168.117.129
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
-    ##消费者数量
-    listener:
-      simple:
-        concurrency: 10
-        max-concurrency: 10
-        ###消费者每次从队列里面取一个(取多个可以加快队列消费速度，但是如果队列一直不消费，就一直占着资源)
-        prefetch: 1
-        ###消费者自动启动
-        auto-startup: true
-        ###消费者消费失败后会重新把消息装回队列
-        default-requeue-rejected: true
-    ##自动重试
-    template:
-      retry:
-        enabled: true
-        ###1秒后重试
-        initial-interval: 1000
-        ###最多三次
-        max-attempts: 3
-        ###最大间隔 1000ms
-        max-interval: 1000
-        multiplier: 1
+#  rabbitmq:
+#    host: 192.168.3.76
+#    port: 5672
+#    username: guest
+#    password: guest
+#    virtual-host: /
+#    ##消费者数量
+#    listener:
+#      simple:
+#        concurrency: 10
+#        max-concurrency: 10
+#        ###消费者每次从队列里面取一个(取多个可以加快队列消费速度，但是如果队列一直不消费，就一直占着资源)
+#        prefetch: 1
+#        ###消费者自动启动
+#        auto-startup: true
+#        ###消费者消费失败后会重新把消息装回队列
+#        default-requeue-rejected: true
+#    ##自动重试
+#    template:
+#      retry:
+#        enabled: true
+#        ###1秒后重试
+#        initial-interval: 1000
+#        ###最多三次
+#        max-attempts: 3
+#        ###最大间隔 1000ms
+#        max-interval: 1000
+#        multiplier: 1
 
 
 mybatis:
@@ -57,9 +57,22 @@ logging:
       springframework:
         web: trace
 
+### pageHelper插件配置
+pagehelper:
+  ### 数据库类型
+  helper-dialect: mysql
+  ### 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页
+  ### 默认不启用，如果pageNum<1或pageNum>pages会返回空数据
+  reasonable: true
+  ### 支持通过 Mapper 接口参数来传递分页参数
+  support-methods-arguments: true
+  params: count=countSql
+  ### 设置为true时，如果pageSize = 0 就会查出所有的记录，但是返回结果仍为page类型
+  #page-size-zero: true
+
 #redis
 redis:
-  host: 192.168.117.129
+  host: 192.168.3.76
   port: 6379
   password: 123456
   timeout: 10

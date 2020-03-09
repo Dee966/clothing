@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import tech.yxing.clothing.dao.ManagerDao;
 import tech.yxing.clothing.exception.GlobleException;
 import tech.yxing.clothing.myshiro.MyShiro;
+import tech.yxing.clothing.pojo.dto.GoodsSizeDto;
+import tech.yxing.clothing.pojo.po.Goods;
+import tech.yxing.clothing.pojo.po.GoodsSize;
 import tech.yxing.clothing.pojo.po.Manager;
 import tech.yxing.clothing.pojo.po.User;
 import tech.yxing.clothing.pojo.vo.LoginVo;
@@ -95,5 +98,25 @@ public class ManagerService {
 
     public Manager getManagerByUname(String username){
         return managerDao.getByUsername(username);
+    }
+
+    public void editGoods(GoodsSizeDto goodsSizeDto){
+        int stock = 0;
+
+        for (GoodsSize goodsSize : goodsSizeDto.getGoodsSizes()){
+            managerDao.editGoodsSize(goodsSize);
+            stock = stock + goodsSize.getGoodsSizeStock();
+        }
+        Goods goods = new Goods(
+                goodsSizeDto.getGoodsId(),
+                goodsSizeDto.getName(),
+                goodsSizeDto.getPrice(),
+                goodsSizeDto.getImge(),
+                goodsSizeDto.getGoodDate(),
+                goodsSizeDto.getDesc(),
+                stock,
+                goodsSizeDto.getGoodsTypeId()
+        );
+        managerDao.editGoods(goods);
     }
 }

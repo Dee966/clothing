@@ -2,6 +2,7 @@ package tech.yxing.clothing.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+import tech.yxing.clothing.pojo.dto.GoodsSizeDto;
 import tech.yxing.clothing.pojo.po.Goods;
 import tech.yxing.clothing.pojo.po.GoodsSize;
 import tech.yxing.clothing.pojo.po.GoodsType;
@@ -47,4 +48,11 @@ public interface GoodsDao {
 
     @Select("select * from goods_size where goods_id=#{goodsId}")
     List<GoodsSize> goodsSize(int goodsId);
+
+    @Select("select * from goods where goods_id = #{goodsId}")
+    @Results({
+            @Result(property = "goodsId", column = "goods_id"),
+            @Result(property = "goodsSizes", column = "goods_id", many = @Many(select = "tech.yxing.clothing.dao.GoodsDao.goodsSize"))
+    })
+    GoodsSizeDto getGoodsAndSize(int goodsId);
 }

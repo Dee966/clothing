@@ -12,8 +12,8 @@ import tech.yxing.clothing.pojo.po.User;
 import tech.yxing.clothing.pojo.vo.AppraiseVo;
 import tech.yxing.clothing.pojo.vo.ChangeStateVo;
 import tech.yxing.clothing.pojo.vo.OrdersListVo;
-import tech.yxing.clothing.rebbitmq.MQReceiver;
-import tech.yxing.clothing.rebbitmq.MQSender;
+//import tech.yxing.clothing.rebbitmq.MQReceiver;
+//import tech.yxing.clothing.rebbitmq.MQSender;
 import tech.yxing.clothing.result.CodeMsg;
 import tech.yxing.clothing.result.Result;
 import tech.yxing.clothing.service.OrdersService;
@@ -34,10 +34,10 @@ public class OrdersController {
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private MQReceiver mqReceiver;
-    @Autowired
-    private MQSender mqSender;
+//    @Autowired
+//    private MQReceiver mqReceiver;
+//    @Autowired
+//    private MQSender mqSender;
     /**
      * @methodDesc: 用户购买商品
      * @Param: ordersList
@@ -186,27 +186,27 @@ public class OrdersController {
         return Result.success(null);
     }
 
-    @PostMapping("/mq")
-    public Result<String> mq(){
-        mqSender.send("hello,imooc");
-        return Result.success("Hello , world");
-    }
-
-    @PostMapping("/mq/topic")
-    public Result<String> topic(){
-        mqSender.sendTopic("hello,imooc");
-        return Result.success("Hello , world");
-    }
-
-    @PostMapping("/mq/fanout")
-    public Result<String> fanout(){
-        mqSender.sendFanout("hello,imooc");
-        return Result.success("Hello , world");
-    }
-
-    @PostMapping("/mq/header")
-    public Result<String> header(){
-        mqSender.sendHeader("hello,imooc");
-        return Result.success("Hello , world");
-    }
+//    @PostMapping("/mq")
+//    public Result<String> mq(){
+//        mqSender.send("hello,imooc");
+//        return Result.success("Hello , world");
+//    }
+//
+//    @PostMapping("/mq/topic")
+//    public Result<String> topic(){
+//        mqSender.sendTopic("hello,imooc");
+//        return Result.success("Hello , world");
+//    }
+//
+//    @PostMapping("/mq/fanout")
+//    public Result<String> fanout(){
+//        mqSender.sendFanout("hello,imooc");
+//        return Result.success("Hello , world");
+//    }
+//
+//    @PostMapping("/mq/header")
+//    public Result<String> header(){
+//        mqSender.sendHeader("hello,imooc");
+//        return Result.success("Hello , world");
+//    }
 }

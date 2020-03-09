@@ -1,5 +1,7 @@
 package tech.yxing.clothing.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.yxing.clothing.dao.UserDao;
@@ -7,19 +9,22 @@ import tech.yxing.clothing.exception.GlobleException;
 import tech.yxing.clothing.myshiro.MyShiro;
 import tech.yxing.clothing.pojo.po.User;
 import tech.yxing.clothing.pojo.vo.LoginVo;
+import tech.yxing.clothing.pojo.vo.PagesVo;
 import tech.yxing.clothing.pojo.vo.TokenId;
 import tech.yxing.clothing.pojo.vo.UserVo;
-import tech.yxing.clothing.redis.RedisService;
+//import tech.yxing.clothing.redis.RedisService;
 import tech.yxing.clothing.redis.UserKey;
 import tech.yxing.clothing.result.CodeMsg;
 import tech.yxing.clothing.result.Result;
+
+import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private RedisService redisService;
+//    @Autowired
+//    private RedisService redisService;
 
     /**
      * @methodDesc: 用户登录
@@ -99,16 +104,16 @@ public class UserService {
      */
     public UserVo getUserInfo(int userId){
         //缓存中取用户对象
-        User user = redisService.get(UserKey.infoById, ""+userId, User.class);
-        if (user != null){
-            return new UserVo(user.getName(),user.getTelephone(),user.getSex(),
-                    user.getBirthday(),user.getArea(),user.getWechat(),user.getAddress());
-        }
+//        User user = redisService.get(UserKey.infoById, ""+userId, User.class);
+//        if (user != null){
+//            return new UserVo(user.getName(),user.getTelephone(),user.getSex(),
+//                    user.getBirthday(),user.getArea(),user.getWechat(),user.getAddress());
+//        }
         //走数据库
-        user = userDao.showInfo(userId);
-        if (user != null){
-            redisService.set(UserKey.infoById, ""+user.getUserId(), user);
-        }
+        User user = userDao.showInfo(userId);
+//        if (user != null){
+//            redisService.set(UserKey.infoById, ""+user.getUserId(), user);
+//        }
 
         return new UserVo(user.getName(),user.getTelephone(),user.getSex(),
                 user.getBirthday(),user.getArea(),user.getWechat(),user.getAddress());
@@ -123,16 +128,16 @@ public class UserService {
     public Double getBalance(int userId){
         User user = userDao.showInfo(userId);
         //取缓存
-        String balance1 = redisService.get(UserKey.balanceById, ""+user.getUserId(), String.class);
-        if (balance1 != null){
-            return Double.parseDouble(balance1);
-        }
+//        String balance1 = redisService.get(UserKey.balanceById, ""+user.getUserId(), String.class);
+//        if (balance1 != null){
+//            return Double.parseDouble(balance1);
+//        }
         //缓存中没有再走数据库
         Double balance = user.getBalance();
-        String yue = String.valueOf(balance);
-        if (balance != null){
-            redisService.set(UserKey.balanceById, "" + user.getUserId(), yue);
-        }
+//        String yue = String.valueOf(balance);
+//        if (balance != null){
+//            redisService.set(UserKey.balanceById, "" + user.getUserId(), yue);
+//        }
         return balance;
     }
 
@@ -145,5 +150,20 @@ public class UserService {
     public User getUserByUname(String username){
         User user = userDao.getUserByUname(username);
         return user;
+    }
+
+    public void delUser(int userId){
+        userDao.delUser(userId);
+    }
+
+    public PageInfo<User> listUser(PagesVo pagesVo){
+        // 1.设置分页
+        PageHelper.startPage(pagesVo.getPage(), pagesVo.getPageSize());
+        // 2.执行查询
+        List<User> users = userDao.listUser();
+        // 3.获取详细分页信息
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        System.out.println(pageInfo.toString());
+        return pageInfo;
     }
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tech.yxing.clothing.myshiro.MyShiro;
+import tech.yxing.clothing.pojo.dto.GoodsSizeDto;
 import tech.yxing.clothing.pojo.po.Manager;
 import tech.yxing.clothing.pojo.po.User;
 import tech.yxing.clothing.pojo.vo.LoginVo;
@@ -95,5 +96,11 @@ public class ManagerController {
         }
         ManagerVo managerVo = managerService.managerShow(managerId);
         return Result.success(managerVo);
+    }
+
+    @PostMapping("/edit")
+    public Result<Object> editGoods(@RequestBody GoodsSizeDto goodsSizeDto){
+        managerService.editGoods(goodsSizeDto);
+        return Result.success(null);
     }
 }

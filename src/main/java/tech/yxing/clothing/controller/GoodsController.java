@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tech.yxing.clothing.pojo.dto.GoodsSizeDto;
 import tech.yxing.clothing.pojo.po.Goods;
 import tech.yxing.clothing.pojo.po.GoodsSize;
 import tech.yxing.clothing.pojo.po.GoodsType;
@@ -14,6 +15,8 @@ import tech.yxing.clothing.pojo.vo.GoodsUploadVo;
 import tech.yxing.clothing.result.Result;
 import tech.yxing.clothing.service.GoodsService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -121,5 +124,16 @@ public class GoodsController {
     public Result<Object> goodsInsert(@RequestBody GoodsUploadVo goodsUploadVo) {
         goodsService.goodsInsert(goodsUploadVo);
         return Result.success(null);
+    }
+
+    @GetMapping("/get_edit/{goodsId}")
+    public Result<GoodsSizeDto> getGoodsAndSize(@PathVariable int goodsId){
+        return Result.success(goodsService.getGoodsAndSize(goodsId));
+    }
+
+    @GetMapping("/wxin")
+    public void testWechat(HttpServletRequest request, HttpServletResponse response)
+    {
+        System.out.println("get");
     }
 }
